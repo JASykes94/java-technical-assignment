@@ -28,23 +28,35 @@ class BasketTest {
                 noItems(),
                 aSingleItemPricedPerUnit(),
                 multipleItemsPricedPerUnit(),
-                aSingleItemPricedByWeight(),
-                multipleItemsPricedByWeight()
+                aSingleItemPricedByWeightUnderOneKilo(),
+                multipleItemsPricedByWeightUnderOneKilo(),
+                aSingleItemPricedByWeightOverOneKilo(),
+                multipleItemsPricedByWeightOverOneKilo()
         );
     }
 
-    private static Arguments aSingleItemPricedByWeight() {
-        return Arguments.of("a single weighed item", "1.25", Collections.singleton(twoFiftyGramsOfAmericanSweets()));
+    private static Arguments aSingleItemPricedByWeightUnderOneKilo() {
+        return Arguments.of("a single weighed item under a kilo", "1.25", Collections.singleton(twoFiftyGramsOfAmericanSweets()));
     }
 
-    private static Arguments multipleItemsPricedByWeight() {
-        return Arguments.of("multiple weighed items", "1.85",
+    private static Arguments aSingleItemPricedByWeightOverOneKilo() {
+        return Arguments.of("a single weighed item over a kilo", "1.49", Collections.singleton(aKiloOfPickAndMix().weighing(BigDecimal.ONE)));
+    }
+
+    private static Arguments multipleItemsPricedByWeightUnderOneKilo() {
+        return Arguments.of("multiple weighed items under a kilo", "1.85",
                 Arrays.asList(twoFiftyGramsOfAmericanSweets(), twoHundredGramsOfPickAndMix())
         );
     }
 
+    private static Arguments multipleItemsPricedByWeightOverOneKilo() {
+        return Arguments.of("multiple weighed items over a kilo", "3.26",
+                Arrays.asList(aKiloOfAmericanSweets().weighing(BigDecimal.ONE), twoHundredGramsOfPickAndMix())
+        );
+    }
+
     private static Arguments multipleItemsPricedPerUnit() {
-        return Arguments.of("multiple items priced per unit", "2.04",
+        return Arguments.of("multiple items priced per unit", "0.49",
                 Arrays.asList(aPackOfDigestives(), aPintOfMilk()));
     }
 

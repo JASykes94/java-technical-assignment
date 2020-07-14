@@ -1,5 +1,7 @@
 package kata.supermarket;
 
+import com.sun.tools.javac.jvm.Items;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -31,6 +33,8 @@ public class Basket {
         TotalCalculator() {
             this.items = items();
         }
+        OneKilogramHalfPriceDiscount oneKilogramHalfPriceDiscount = new OneKilogramHalfPriceDiscount();
+        BuyOneGetOneFreeDiscount buyOneGetOneFreeDiscount = new BuyOneGetOneFreeDiscount();
 
         private BigDecimal subtotal() {
             return items.stream().map(Item::price)
@@ -39,15 +43,22 @@ public class Basket {
                     .setScale(2, RoundingMode.HALF_UP);
         }
 
-        /**
-         * TODO: This could be a good place to apply the results of
-         *  the discount calculations.
-         *  It is not likely to be the best place to do those calculations.
-         *  Think about how Basket could interact with something
-         *  which provides that functionality.
-         */
         private BigDecimal discounts() {
-            return BigDecimal.ZERO;
+            List<Item> unitItems = new ArrayList<>();
+            List<Item> weightItems = new ArrayList<>();
+
+            for (Item item : items) {
+                if (item instanceof ItemByUnit) {
+                    unitItems.add(item);
+                } else {
+                    weightItems.add(item);
+                }
+            }
+
+            BigDecimal unitDiscount = buyOneGetOneFreeDiscount.discountPrice(unitItems);
+            BigDecimal weightDiscount = oneKilogramHalfPriceDiscount.discountPrice(weightItems);
+
+            return unitDiscount.add(weightDiscount);
         }
 
         private BigDecimal calculate() {
