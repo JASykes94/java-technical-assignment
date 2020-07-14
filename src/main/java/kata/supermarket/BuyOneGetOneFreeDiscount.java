@@ -3,6 +3,9 @@ package kata.supermarket;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Implementation of a BOGOF type discount, applied to all ItemByUnit objects.
+ */
 public class BuyOneGetOneFreeDiscount implements Discount
 {
     @Override
@@ -18,6 +21,7 @@ public class BuyOneGetOneFreeDiscount implements Discount
        }
        else
        {
+           // If there is one or zero items in the list, no discount is applied
            return BigDecimal.ZERO;
        }
     }

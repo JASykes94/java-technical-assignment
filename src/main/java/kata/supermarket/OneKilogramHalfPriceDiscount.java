@@ -10,6 +10,7 @@ public class OneKilogramHalfPriceDiscount implements Discount
     {
         BigDecimal weight = new BigDecimal(0);
 
+        // Get the total weight of all items in the list (assuming all items are the same)
         for (Item item : items)
         {
             ItemByWeight itemByWeight = (ItemByWeight) item;
@@ -23,11 +24,14 @@ public class OneKilogramHalfPriceDiscount implements Discount
 
             return total.divide(new BigDecimal(2)).setScale(2, BigDecimal.ROUND_HALF_UP);
         } else {
+            // Find the whole number of kilograms
             BigDecimal[] splitWeight = weight.divideAndRemainder(BigDecimal.ONE);
             BigDecimal wholeKilograms = splitWeight[0];
 
+            // Calculate the price per kilogram from total price
             BigDecimal pricePerKilogram = getTotal(items).divide(weight, BigDecimal.ROUND_HALF_UP);
 
+            // Calculate the price for the whole kilograms in the list and apply discount
             return pricePerKilogram.multiply(wholeKilograms).divide(new BigDecimal(2)).setScale(2, BigDecimal.ROUND_HALF_UP);
         }
     }
